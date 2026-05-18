@@ -55,6 +55,14 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
     }
   };
 
+  const handleProductClick = (product: typeof products[0]) => {
+    if (product.isDemoButton) {
+      onOpenMusterimDemo();
+    } else {
+      window.location.href = product.link;
+    }
+  };
+
   return (
     <>
       <section className="relative pt-32 pb-24 px-6 lg:px-8">
@@ -90,7 +98,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
               variants={fadeInUp}
               className="flex flex-col sm:flex-row items-center justify-center gap-6"
             >
-              <a
+              
                 href="#solutions"
                 className="group px-8 py-3 border border-zinc-400 hover:border-zinc-200 text-zinc-200 hover:text-zinc-50 transition-all duration-300 flex items-center gap-2 text-sm font-light tracking-wide"
               >
@@ -129,7 +137,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
               >
                 <ProductCard
                   {...product}
-                  onDemoClick={() => window.open(product.link, '_blank')}
+                  onDemoClick={() => handleProductClick(product)}
                 />
               </motion.div>
             ))}
