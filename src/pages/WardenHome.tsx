@@ -129,7 +129,9 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
               >
                 <ProductCard
                   {...product}
-                  onDemoClick={(product) => window.open(product.link, '_blank')}
+                  // Eski hali: onDemoClick={(product) => window.open(product.link, '_blank')}
+// Yeni Hali:
+onDemoClick={() => window.open(product.link, '_blank')}
                 />
               </motion.div>
             ))}
