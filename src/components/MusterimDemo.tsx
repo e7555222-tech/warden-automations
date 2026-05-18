@@ -74,7 +74,6 @@ const mockLeads: Lead[] = [
 export default function MusterimDemo({ isOpen, onClose }: MusterimDemoProps) {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
-  // Modal kapandığında seçili lead'i de sıfırla
   const handleClose = () => {
     setSelectedLead(null);
     onClose();
@@ -100,21 +99,20 @@ export default function MusterimDemo({ isOpen, onClose }: MusterimDemoProps) {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative w-full max-w-4xl max-h-[90vh] bg-zinc-950 border border-zinc-800 shadow-2xl overflow-hidden flex flex-col"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-zinc-800">
+            {/* BAŞLIK (HEADER) - shrink-0 eklendi, artık asla yukarı kayıp kaybolmayacak */}
+            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-zinc-800 bg-zinc-950 z-10">
               <h2 className="text-lg font-light text-zinc-100 tracking-wide">MÜŞTERİM DEMO</h2>
-              <button onClick={handleClose} className="text-zinc-500 hover:text-zinc-300 transition-colors">
-                <X className="w-5 h-5" />
+              <button onClick={handleClose} className="text-zinc-500 hover:text-red-400 transition-colors p-1">
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Content */}
-            <div className="p-6 overflow-y-auto">
+            {/* İÇERİK - flex-1 ve min-h-0 eklendi, artık sadece burası kendi içinde kayacak */}
+            <div className="flex-1 p-6 overflow-y-auto min-h-0">
               <div className="space-y-4">
                 {mockLeads.map((lead) => (
                   <div
                     key={lead.id}
-                    // Tıklanan zaten açıksa kapat, değilse aç
                     onClick={() => setSelectedLead(selectedLead?.id === lead.id ? null : lead)}
                     className={`p-4 border transition-all cursor-pointer flex items-center justify-between ${
                       selectedLead?.id === lead.id
@@ -150,7 +148,6 @@ export default function MusterimDemo({ isOpen, onClose }: MusterimDemoProps) {
                     exit={{ opacity: 0, height: 0 }}
                     className="mt-8 border-t border-zinc-800 pt-8 overflow-hidden"
                   >
-                    {/* YENİ EKLENEN UX DOSTU KAPATMA BUTONU VE BAŞLIK */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                       <h3 className="text-sm uppercase tracking-[0.2em] text-zinc-500 font-light">
                         Detaylı Analiz - {selectedLead.name}
