@@ -12,7 +12,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       id: 'musterim',
       name: 'Müşterim',
       description: 'Yapay Zeka Destekli Akıllı Lead Nitelendirme ve Skorlama Sistemi',
-      details: 'Müşterim, B2B işletmeleriniz için gelen müşteri adaylarını otomatik olarak analiz eder, nitelendirirgenetik yapay zekayı kullanarak en yüksek potansiyel müşterileri tanımlar. Gerçek zamanlı skorlama ve segmentasyon ile satış ekibinizin verimliliğini 3x artırır.',
+      details: 'Müşterim, B2B işletmeleriniz için gelen müşteri adaylarını otomatik olarak analiz eder, nitelendirir ve üretken yapay zekayı kullanarak en yüksek potansiyel müşterileri tanımlar. Gerçek zamanlı skorlama ile satış ekibinizin verimliliğini 3x artırır.',
       icon: '⚡',
       button: 'Sistemi Test Et',
       link: "https://wardenb2b-bwhnkluukmucoikbjsajyf.streamlit.app/",
@@ -22,7 +22,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       id: 'voice-warden',
       name: 'Voice Warden',
       description: '7/24 Müşteri Karşılayan ve Randevu Alan Otonom Sesli Asistan',
-      details: 'Doğal dil işleme ve yapay zekayla güçlendirilen Voice Warden, müşteri çağrılarını 7/24 sorunsuz şekilde yönetir. Randevu almaktan müşteri sorunlarını çözmesine kadar, insan gibi konuşan sesli asistan tam zamanlı desteği sağlar.',
+      details: 'Doğal dil işleme ve yapay zekayla güçlendirilen Voice Warden, müşteri çağrılarını 7/24 sorunsuz şekilde yönetir. Randevu almaktan müşteri sorunlarını çözmesine kadar, insan gibi konuşan sesli asistan tam zamanlı destek sağlar.',
       icon: '🎙️',
       button: 'Demo Talebi',
       link: "https://calendly.com/e7555222/15-min-ai-strategy-discovery-call-warden-automations",
@@ -83,7 +83,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
               variants={fadeInUp}
               className="text-lg md:text-xl text-zinc-400 font-light max-w-2xl mx-auto mb-12 leading-relaxed"
             >
-              Warden Automations, kuruluşların operasyon verimliliğini katmanmak ve kişi başına üretkenliği artırmak için tasarlanmış yapay zeka ve otomasyon sistemleri sunar.
+              Warden Automations, kuruluşların operasyon verimliliğini katlamak ve kişi başına üretkenliği artırmak için tasarlanmış yapay zeka ve otomasyon sistemleri sunar.
             </motion.p>
 
             <motion.div
@@ -129,9 +129,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
               >
                 <ProductCard
                   {...product}
-                  // Eski hali: onDemoClick={(product) => window.open(product.link, '_blank')}
-// Yeni Hali:
-onDemoClick={() => window.open(product.link, '_blank')}
+                  onDemoClick={() => window.open(product.link, '_blank')}
                 />
               </motion.div>
             ))}
@@ -140,30 +138,4 @@ onDemoClick={() => window.open(product.link, '_blank')}
       </section>
 
       <section id="contact" className="relative py-24 px-6 lg:px-8 border-t border-zinc-800">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-light text-zinc-50 mb-6">
-              Çözümleri Keşfetmeye Hazır mısınız?
-            </h2>
-            <p className="text-lg text-zinc-400 font-light mb-8">
-              Warden Automations ekibimiz, işletmenizin gereksinimlerine uygun özel çözümler sunmak için hazır.
-            </p>
-            <motion.a
-              href="https://calendly.com/e7555222/15-min-ai-strategy-discovery-call-warden-automations"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.02 }}
-              className="inline-block px-8 py-3 border border-zinc-400 hover:border-zinc-200 text-zinc-200 hover:text-zinc-50 transition-all duration-300 text-sm font-light tracking-wide"
-            >
-              Bize Ulaşın
-            </motion.a>
-          </motion.div>
-        </div>
-      </section>
-    </>
-  );
-}
+        <div className="max-w-4xl mx-
