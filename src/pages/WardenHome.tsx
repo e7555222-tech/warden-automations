@@ -138,4 +138,30 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       </section>
 
       <section id="contact" className="relative py-24 px-6 lg:px-8 border-t border-zinc-800">
-        <div className="max-w-4xl mx-
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-light text-zinc-50 mb-6">
+              Çözümleri Keşfetmeye Hazır mısınız?
+            </h2>
+            <p className="text-lg text-zinc-400 font-light mb-8">
+              Warden Automations ekibimiz, işletmenizin gereksinimlerine uygun özel çözümler sunmak için hazır.
+            </p>
+            <motion.a
+              href="https://calendly.com/e7555222/15-min-ai-strategy-discovery-call-warden-automations"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.02 }}
+              className="inline-block px-8 py-3 border border-zinc-400 hover:border-zinc-200 text-zinc-200 hover:text-zinc-50 transition-all duration-300 text-sm font-light tracking-wide"
+            >
+              Bize Ulaşın
+            </motion.a>
+          </motion.div>
+        </div>
+      </section>
+    </>
+  );
+}
