@@ -29,7 +29,8 @@ export default function ProductCard({
       className="group relative h-full"
     >
       <div className="relative h-full p-8 border border-zinc-800 hover:border-zinc-700 bg-zinc-900/40 backdrop-blur-sm transition-all duration-300 flex flex-col">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-50/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {/* Tıklamayı engellememesi için pointer-events-none eklendi */}
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-50/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
         <div className="relative z-10 flex flex-col h-full">
           <div className="mb-6">
@@ -51,7 +52,8 @@ export default function ProductCard({
           <motion.button
             onClick={onDemoClick}
             whileHover={{ x: 2 }}
-            className="group/btn w-full px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 bg-zinc-950/50 hover:bg-zinc-900 transition-all duration-300 text-sm font-light tracking-wide flex items-center justify-between"
+            /* Butonu en üste almak için relative z-50 eklendi */
+            className="relative z-50 group/btn w-full px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 bg-zinc-950/50 hover:bg-zinc-900 transition-all duration-300 text-sm font-light tracking-wide flex items-center justify-between cursor-pointer"
           >
             <span>{button}</span>
             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -59,7 +61,8 @@ export default function ProductCard({
         </div>
       </div>
 
-      <div className="absolute inset-0 border border-zinc-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {/* Tıklamayı engellememesi için pointer-events-none eklendi */}
+      <div className="absolute inset-0 border border-zinc-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </motion.div>
   );
 }
