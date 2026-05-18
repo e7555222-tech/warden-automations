@@ -15,6 +15,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       details: 'Müşterim, B2B işletmeleriniz için gelen müşteri adaylarını otomatik olarak analiz eder, nitelendirirgenetik yapay zekayı kullanarak en yüksek potansiyel müşterileri tanımlar. Gerçek zamanlı skorlama ve segmentasyon ile satış ekibinizin verimliliğini 3x artırır.',
       icon: '⚡',
       button: 'Sistemi Test Et',
+      link: "https://wardenb2b-bwhnkluukmucoikbjsajyf.streamlit.app/",
       isDemoButton: true
     },
     {
@@ -24,6 +25,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       details: 'Doğal dil işleme ve yapay zekayla güçlendirilen Voice Warden, müşteri çağrılarını 7/24 sorunsuz şekilde yönetir. Randevu almaktan müşteri sorunlarını çözmesine kadar, insan gibi konuşan sesli asistan tam zamanlı desteği sağlar.',
       icon: '🎙️',
       button: 'Demo Talebi',
+      link: "https://calendly.com/e7555222/15-min-ai-strategy-discovery-call-warden-automations",
       isDemoButton: false
     },
     {
@@ -33,6 +35,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       details: 'Data Hunter, web üzerindeki binlerce kaynaktan B2B verilerini toplar ve analiz eder. Sektörünüze uygun potansiyel müşterileri otomatik olarak keşfeder, iletişim bilgilerini derler ve pazarlama kampanyalarınız için hazır veri setleri hazırlar.',
       icon: '🔍',
       button: 'Demo Talebi',
+      link: "https://calendly.com/e7555222/15-min-ai-strategy-discovery-call-warden-automations",
       isDemoButton: false
     }
   ];
@@ -126,7 +129,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
               >
                 <ProductCard
                   {...product}
-                  onDemoClick={product.isDemoButton ? onOpenMusterimDemo : undefined}
+                  onDemoClick={(product) => window.open(product.link, '_blank')}
                 />
               </motion.div>
             ))}
