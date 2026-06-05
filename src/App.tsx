@@ -3,55 +3,64 @@ import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import WardenHome from './pages/WardenHome';
 import MusterimDemo from './components/MusterimDemo';
+import NetworkBackground from './components/NetworkBackground';
+
+function BrandMark() {
+  return (
+    <a href="#top" className="flex items-center gap-3 group">
+      <span className="relative w-7 h-7 rounded-lg shadow-[0_0_24px_rgba(77,141,255,0.45)]"
+        style={{ background: 'conic-gradient(from 140deg, #4d8dff, #2fe6e0, #b06bff, #4d8dff)' }}>
+        <span className="absolute inset-[5px] rounded-[4px] bg-[#05060a]" />
+      </span>
+      <span className="font-display font-semibold tracking-tight text-zinc-50 text-[15px]">
+        Warden Automations
+      </span>
+    </a>
+  );
+}
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMusterimDemoOpen, setIsMusterimDemoOpen] = useState(false);
 
+  const links = [
+    { label: 'Ürünler', href: '#solutions' },
+    { label: 'Nasıl Çalışır', href: '#how' },
+    { label: 'İletişim', href: '#contact' },
+  ];
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 overflow-hidden scroll-smooth font-sans">
-      <div className="fixed inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black" />
+    <div className="relative min-h-screen bg-[#05060a] text-zinc-50 overflow-x-hidden scroll-smooth font-sans" id="top">
+      <div className="warden-nebula" />
+      <NetworkBackground />
+      <div className="warden-grain" />
 
       <div className="relative z-10">
-        <nav className="border-b border-zinc-800 backdrop-blur-md bg-zinc-950/50 sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+        <nav className="fixed top-0 inset-x-0 z-40 backdrop-blur-md"
+          style={{ background: 'linear-gradient(180deg, rgba(5,6,10,0.72), transparent)' }}>
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-5">
             <div className="flex items-center justify-between">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-sm uppercase tracking-[0.2em] font-light text-zinc-200"
-              >
-                Warden Automations
-              </motion.div>
+              <BrandMark />
 
               <div className="hidden sm:flex items-center gap-8">
-                <motion.a
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  href="#solutions"
-                  className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
-                >
-                  Solutions
-                </motion.a>
-                <motion.a
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  href="#contact"
-                  className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
-                >
-                  Contact
-                </motion.a>
+                {links.map((l) => (
+                  <a key={l.href} href={l.href}
+                    className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">
+                    {l.label}
+                  </a>
+                ))}
+                <a href="#contact"
+                  className="text-sm font-medium px-4 py-2 rounded-full border border-[rgba(120,150,220,0.2)] text-zinc-100 bg-[rgba(77,141,255,0.08)] hover:bg-[rgba(77,141,255,0.2)] hover:border-warden-blue transition-all">
+                  Demo Talep Et
+                </a>
               </div>
 
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="sm:hidden text-zinc-400 hover:text-zinc-200 transition-colors"
+                className="sm:hidden text-zinc-300 hover:text-zinc-50 transition-colors"
+                aria-label="Menü"
               >
-                {isMobileMenuOpen ? (
-                  <X className="w-5 h-5" />
-                ) : (
-                  <Menu className="w-5 h-5" />
-                )}
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
 
@@ -59,14 +68,14 @@ function App() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="sm:hidden mt-6 pt-6 border-t border-zinc-800 space-y-4"
+                className="sm:hidden mt-5 pt-5 border-t border-[rgba(120,150,220,0.14)] space-y-3"
               >
-                <a href="#solutions" className="block text-sm text-zinc-400 hover:text-zinc-200">
-                  Solutions
-                </a>
-                <a href="#contact" className="block text-sm text-zinc-400 hover:text-zinc-200">
-                  Contact
-                </a>
+                {links.map((l) => (
+                  <a key={l.href} href={l.href} onClick={() => setIsMobileMenuOpen(false)}
+                    className="block text-sm text-zinc-400 hover:text-zinc-100">
+                    {l.label}
+                  </a>
+                ))}
               </motion.div>
             )}
           </div>
@@ -74,44 +83,46 @@ function App() {
 
         <WardenHome onOpenMusterimDemo={() => setIsMusterimDemoOpen(true)} />
 
-        <footer className="border-t border-zinc-800 py-12 px-6 mt-32">
+        <footer className="border-t border-[rgba(120,150,220,0.14)] py-16 px-6 mt-24">
           <div className="max-w-7xl mx-auto">
             <div className="grid md:grid-cols-4 gap-12 mb-12">
               <div>
-                <h3 className="text-xs uppercase tracking-[0.2em] font-light text-zinc-400 mb-4">Company</h3>
-                <div className="text-sm text-zinc-500 font-light">Warden Automations</div>
+                <BrandMark />
+                <p className="mt-4 text-sm text-zinc-500 font-light max-w-[260px]">
+                  Otonom B2B yapay zeka ağları. Keşfeder, nitelendirir, dönüştürür.
+                </p>
               </div>
               <div>
-                <h3 className="text-xs uppercase tracking-[0.2em] font-light text-zinc-400 mb-4">Products</h3>
-                <ul className="space-y-2 text-sm text-zinc-500 font-light">
+                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-4">Ürünler</h3>
+                <ul className="space-y-2 text-sm text-zinc-400 font-light">
                   <li>Müşterim</li>
                   <li>Voice Warden</li>
                   <li>Data Hunter</li>
                 </ul>
               </div>
               <div>
-                <h3 className="text-xs uppercase tracking-[0.2em] font-light text-zinc-400 mb-4">Contact</h3>
-                <p className="text-sm text-zinc-500 font-light">hello@wardenautomations.com</p>
+                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-4">İletişim</h3>
+                <a href="mailto:hello@wardenautomations.com"
+                  className="text-sm text-zinc-400 hover:text-warden-cyan font-light transition-colors">
+                  hello@wardenautomations.com
+                </a>
               </div>
               <div>
-                <h3 className="text-xs uppercase tracking-[0.2em] font-light text-zinc-400 mb-4">Office</h3>
-                <p className="text-sm text-zinc-500 font-light">İstanbul, Turkey</p>
+                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-4">Ofis</h3>
+                <p className="text-sm text-zinc-400 font-light">İstanbul, Türkiye</p>
               </div>
             </div>
 
-            <div className="border-t border-zinc-800 pt-8">
+            <div className="border-t border-[rgba(120,150,220,0.14)] pt-8">
               <p className="text-xs text-zinc-600 text-center font-light">
-                © 2026 Warden Automations. All rights reserved.
+                © 2026 Warden Automations. Tüm hakları saklıdır.
               </p>
             </div>
           </div>
         </footer>
       </div>
 
-      <MusterimDemo
-        isOpen={isMusterimDemoOpen}
-        onClose={() => setIsMusterimDemoOpen(false)}
-      />
+      <MusterimDemo isOpen={isMusterimDemoOpen} onClose={() => setIsMusterimDemoOpen(false)} />
     </div>
   );
 }

@@ -20,7 +20,6 @@ export default function ProjectCard({
   image_url,
   category,
   technologies,
-  link,
   demo_link,
   onViewDetails
 }: ProjectCardProps) {
