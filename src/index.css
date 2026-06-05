@@ -1,21 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    @apply font-sans;
-  }
+:root {
+  --bg: #05060a;
+  --panel: rgba(18, 22, 34, 0.5);
+  --panel-line: rgba(120, 150, 220, 0.14);
+}
 
+@layer base {
   html {
     scroll-behavior: smooth;
+  }
+  body {
+    background: var(--bg);
+    font-family: 'Satoshi', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Clash Display', system-ui, sans-serif;
   }
 }
 
 @layer components {
   .text-balance {
     text-wrap: balance;
+  }
+  /* Atmosphere layers behind the fixed 3D canvas */
+  .warden-nebula {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(900px 600px at 18% 12%, rgba(77, 141, 255, 0.16), transparent 60%),
+      radial-gradient(820px 720px at 85% 80%, rgba(176, 107, 255, 0.12), transparent 60%),
+      radial-gradient(700px 520px at 60% 50%, rgba(47, 230, 224, 0.07), transparent 65%);
+  }
+  .warden-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .warden-gradient-text {
+    background: linear-gradient(100deg, #4d8dff 8%, #2fe6e0 55%, #b06bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* mouse-tracked spotlight for product cards */
+  .warden-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(440px 220px at var(--mx, 50%) var(--my, 0%), rgba(77, 141, 255, 0.16), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.35s;
+    pointer-events: none;
+  }
+  .warden-card:hover::before {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
