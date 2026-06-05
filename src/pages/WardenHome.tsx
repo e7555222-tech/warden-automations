@@ -79,7 +79,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
   return (
     <>
       {/* HERO */}
-      <section className="relative pt-40 pb-20 px-6 lg:px-8">
+      <section className="relative pt-32 pb-16 sm:pt-40 sm:pb-20 px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div initial="hidden" animate="visible" variants={stagger}>
             <motion.span variants={fadeInUp}
@@ -89,7 +89,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
             </motion.span>
 
             <motion.h1 variants={fadeInUp}
-              className="font-display text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-zinc-50 mt-7 mb-7 leading-[1.04]">
+              className="font-display text-[2.6rem] sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-zinc-50 mt-6 mb-6 sm:mt-7 sm:mb-7 leading-[1.07] sm:leading-[1.04]">
               İşletmenizin{' '}
               <span className="text-zinc-400 font-normal">kendi kendine çalışan</span>{' '}
               <span className="warden-gradient-text">büyüme ağı</span>
@@ -132,7 +132,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7 }}
-            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden
+            className="mt-14 sm:mt-20 grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden
               border border-[rgba(120,150,220,0.14)] bg-[rgba(120,150,220,0.14)]"
           >
             {stats.map((s) => (
@@ -146,7 +146,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       </section>
 
       {/* PRODUCTS */}
-      <section id="solutions" className="relative py-28 px-6 lg:px-8">
+      <section id="solutions" className="relative py-20 sm:py-28 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -180,8 +180,8 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" className="relative py-28 px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-14 items-center">
+      <section id="how" className="relative py-20 sm:py-28 px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-14 items-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -225,7 +225,7 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
       </section>
 
       {/* CONTACT CTA */}
-      <section id="contact" className="relative py-24 px-6 lg:px-8">
+      <section id="contact" className="relative py-16 sm:py-24 px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 24 }}

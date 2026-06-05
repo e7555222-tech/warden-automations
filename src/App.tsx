@@ -1,9 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import WardenHome from './pages/WardenHome';
 import MusterimDemo from './components/MusterimDemo';
-import NetworkBackground from './components/NetworkBackground';
+
+// 3D arka plan three.js içerir; ilk boyamayı bloklamasın diye ayrı chunk olarak tembel yüklenir.
+const NetworkBackground = lazy(() => import('./components/NetworkBackground'));
+
+/** İlk paint sonrası (idle) true olur — ağır 3D canvas'ın mount'unu erteler, LCP'yi iyileştirir. */
+function useDeferredMount() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const w = window as typeof window & {
+      requestIdleCallback?: (cb: () => void) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (w.requestIdleCallback) {
+      const id = w.requestIdleCallback(() => setReady(true));
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const id = window.setTimeout(() => setReady(true), 200);
+    return () => window.clearTimeout(id);
+  }, []);
+  return ready;
+}
 
 function BrandMark() {
   return (
@@ -22,6 +42,7 @@ function BrandMark() {
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMusterimDemoOpen, setIsMusterimDemoOpen] = useState(false);
+  const show3D = useDeferredMount();
 
   const links = [
     { label: 'Ürünler', href: '#solutions' },
@@ -32,7 +53,11 @@ function App() {
   return (
     <div className="relative min-h-screen bg-[#05060a] text-zinc-50 overflow-x-hidden scroll-smooth font-sans" id="top">
       <div className="warden-nebula" />
-      <NetworkBackground />
+      {show3D && (
+        <Suspense fallback={null}>
+          <NetworkBackground />
+        </Suspense>
+      )}
       <div className="warden-grain" />
 
       <div className="relative z-10">
