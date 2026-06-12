@@ -64,6 +64,26 @@
   .warden-card:hover::before {
     opacity: 1;
   }
+  /* infinite logo strip — list is duplicated in markup, loop hides the seam */
+  .warden-marquee {
+    animation: warden-marquee 38s linear infinite;
+  }
+  .warden-marquee-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .warden-marquee-mask:hover .warden-marquee {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes warden-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

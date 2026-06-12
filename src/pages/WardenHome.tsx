@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Mic, Target, Radar, Search, ScanLine, PhoneCall } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
+import IntegrationsMarquee from '../components/IntegrationsMarquee';
+import FaqSection from '../components/FaqSection';
+import ComparisonSection from '../components/ComparisonSection';
 
 interface WardenHomeProps {
   onOpenMusterimDemo: () => void;
@@ -63,8 +66,14 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
   ];
 
   const fadeInUp = {
-    hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } },
+    hidden: { opacity: 0, y: 24, rotateX: 10, transformPerspective: 900 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transformPerspective: 900,
+      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+    },
   };
   const stagger = {
     hidden: { opacity: 0 },
@@ -128,15 +137,15 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
 
           {/* STATS */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 28, rotateX: 16, transformPerspective: 900 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0, transformPerspective: 900 }}
             viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="mt-14 sm:mt-20 grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden
               border border-[rgba(120,150,220,0.14)] bg-[rgba(120,150,220,0.14)]"
           >
             {stats.map((s) => (
-              <div key={s.label} className="bg-[#0a0d16] px-6 py-7">
+              <div key={s.label} className="bg-[rgba(10,13,22,0.72)] backdrop-blur-md px-6 py-7">
                 <div className="font-display text-3xl md:text-4xl font-semibold warden-gradient-text">{s.value}</div>
                 <div className="text-sm text-zinc-500 mt-1.5 font-light">{s.label}</div>
               </div>
@@ -144,6 +153,8 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
           </motion.div>
         </div>
       </section>
+
+      <IntegrationsMarquee />
 
       {/* PRODUCTS */}
       <section id="solutions" className="relative py-20 sm:py-28 px-6 lg:px-8">
@@ -167,10 +178,11 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
             {products.map((product, idx) => (
               <motion.div
                 key={product.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 32, rotateX: 14, transformPerspective: 1000 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0, transformPerspective: 1000 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1, duration: 0.6 }}
+                transition={{ delay: idx * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="h-full"
               >
                 <ProductCard {...product} onDemoClick={() => handleProductClick(product)} />
               </motion.div>
@@ -205,13 +217,18 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="flex gap-5 py-6 border-t border-[rgba(120,150,220,0.14)] last:border-b"
+                className="flex gap-5"
               >
-                <span className="flex-none flex items-center justify-center w-11 h-11 rounded-xl
-                  border border-[rgba(120,150,220,0.18)] bg-[rgba(77,141,255,0.08)] text-warden-cyan">
-                  <s.Icon className="w-5 h-5" strokeWidth={1.6} />
-                </span>
-                <div>
+                <div className="flex-none flex flex-col items-center">
+                  <span className="flex items-center justify-center w-11 h-11 rounded-xl
+                    border border-[rgba(120,150,220,0.18)] bg-[rgba(77,141,255,0.08)] text-warden-cyan">
+                    <s.Icon className="w-5 h-5" strokeWidth={1.6} />
+                  </span>
+                  {i < steps.length - 1 && (
+                    <span className="w-px flex-1 my-2 bg-gradient-to-b from-[rgba(77,141,255,0.45)] via-[rgba(47,230,224,0.2)] to-transparent" />
+                  )}
+                </div>
+                <div className={i < steps.length - 1 ? 'pb-10' : ''}>
                   <div className="flex items-baseline gap-3">
                     <span className="font-mono text-sm text-warden-blue">{s.n}</span>
                     <h4 className="font-display text-xl font-semibold text-zinc-50">{s.t}</h4>
@@ -224,18 +241,23 @@ export default function WardenHome({ onOpenMusterimDemo }: WardenHomeProps) {
         </div>
       </section>
 
+      <ComparisonSection />
+
+      <FaqSection />
+
       {/* CONTACT CTA */}
       <section id="contact" className="relative py-16 sm:py-24 px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 32, rotateX: 10, transformPerspective: 1100 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0, transformPerspective: 1100 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="relative overflow-hidden rounded-3xl text-center px-8 py-16 md:py-24
-              border border-[rgba(120,150,220,0.14)]"
+              border border-[rgba(120,150,220,0.14)] backdrop-blur-md"
             style={{
               background:
-                'radial-gradient(600px 300px at 50% 0%, rgba(77,141,255,0.18), transparent 70%), #0a0d16',
+                'radial-gradient(600px 300px at 50% 0%, rgba(77,141,255,0.18), transparent 70%), rgba(10,13,22,0.82)',
             }}
           >
             <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-warden-cyan">Başlayalım</span>

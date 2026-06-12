@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import WardenHome from './pages/WardenHome';
 import MusterimDemo from './components/MusterimDemo';
@@ -43,10 +43,13 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMusterimDemoOpen, setIsMusterimDemoOpen] = useState(false);
   const show3D = useDeferredMount();
+  const { scrollYProgress } = useScroll();
+  const scrollProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: 0.001 });
 
   const links = [
     { label: 'Ürünler', href: '#solutions' },
     { label: 'Nasıl Çalışır', href: '#how' },
+    { label: 'SSS', href: '#faq' },
     { label: 'İletişim', href: '#contact' },
   ];
 
@@ -61,6 +64,10 @@ function App() {
       <div className="warden-grain" />
 
       <div className="relative z-10">
+        <motion.div
+          className="fixed top-0 inset-x-0 h-[2px] z-50 origin-left bg-gradient-to-r from-warden-blue via-warden-cyan to-warden-violet"
+          style={{ scaleX: scrollProgress }}
+        />
         <nav className="fixed top-0 inset-x-0 z-40 backdrop-blur-md"
           style={{ background: 'linear-gradient(180deg, rgba(5,6,10,0.72), transparent)' }}>
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-5">
@@ -120,9 +127,18 @@ function App() {
               <div>
                 <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-4">Ürünler</h3>
                 <ul className="space-y-2 text-sm text-zinc-400 font-light">
-                  <li>Müşterim</li>
-                  <li>Voice Warden</li>
-                  <li>Data Hunter</li>
+                  <li><a href="#solutions" className="hover:text-warden-cyan transition-colors">Müşterim</a></li>
+                  <li><a href="#solutions" className="hover:text-warden-cyan transition-colors">Voice Warden</a></li>
+                  <li><a href="#solutions" className="hover:text-warden-cyan transition-colors">Data Hunter</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-4">Keşfet</h3>
+                <ul className="space-y-2 text-sm text-zinc-400 font-light">
+                  <li><a href="#how" className="hover:text-warden-cyan transition-colors">Nasıl Çalışır</a></li>
+                  <li><a href="#compare" className="hover:text-warden-cyan transition-colors">Karşılaştırma</a></li>
+                  <li><a href="#faq" className="hover:text-warden-cyan transition-colors">SSS</a></li>
+                  <li><a href="#contact" className="hover:text-warden-cyan transition-colors">Demo Talep Et</a></li>
                 </ul>
               </div>
               <div>
@@ -131,16 +147,17 @@ function App() {
                   className="text-sm text-zinc-400 hover:text-warden-cyan font-light transition-colors">
                   hello@wardenautomations.com
                 </a>
-              </div>
-              <div>
-                <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-4">Ofis</h3>
-                <p className="text-sm text-zinc-400 font-light">İstanbul, Türkiye</p>
+                <p className="text-sm text-zinc-500 font-light mt-3">İstanbul, Türkiye</p>
               </div>
             </div>
 
-            <div className="border-t border-[rgba(120,150,220,0.14)] pt-8">
-              <p className="text-xs text-zinc-600 text-center font-light">
+            <div className="border-t border-[rgba(120,150,220,0.14)] pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <p className="text-xs text-zinc-600 font-light">
                 © 2026 Warden Automations. Tüm hakları saklıdır.
+              </p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-700 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-warden-cyan/60 animate-pulseDot" />
+                Sistem aktif — 7/24
               </p>
             </div>
           </div>

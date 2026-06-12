@@ -10,6 +10,11 @@ const COL = {
   line: new THREE.Color('#2b6bd6'),
 };
 
+// Kamera scroll ile bu derinlik aralığında ağın içinden uçar
+const CAM_START_Z = 14;
+const CAM_END_Z = -26;
+const FIELD_DEPTH: [number, number] = [-46, 9];
+
 interface NetData {
   pos: Float32Array;
   col: Float32Array;
@@ -22,10 +27,11 @@ function buildNetwork(count: number): NetData {
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
   const nodes: THREE.Vector3[] = [];
+  const [zMin, zMax] = FIELD_DEPTH;
   for (let i = 0; i < count; i++) {
-    const x = (Math.random() - 0.5) * 20;
-    const y = (Math.random() - 0.5) * 11;
-    const z = (Math.random() - 0.5) * 7 - 1;
+    const x = (Math.random() - 0.5) * 26;
+    const y = (Math.random() - 0.5) * 15;
+    const z = zMin + Math.random() * (zMax - zMin);
     pos.set([x, y, z], i * 3);
     nodes.push(new THREE.Vector3(x, y, z));
     // ~14% "qualified leads" glow amber, rest blue/cyan
@@ -33,7 +39,7 @@ function buildNetwork(count: number): NetData {
     col.set([c.r, c.g, c.b], i * 3);
   }
   const edges: [number, number][] = [];
-  const R = 4.2;
+  const R = 4.6;
   for (let i = 0; i < count; i++) {
     let links = 0;
     for (let j = i + 1; j < count && links < 3; j++) {
@@ -57,9 +63,37 @@ interface Packet {
   speed: number;
 }
 
-function Network({ count, packetCount }: { count: number; packetCount: number }) {
+/** Sayfa scroll oranını (0..1) rAF dışında pasif dinleyicilerle takip eder. */
+function useScrollProgress() {
+  const progress = useRef(0);
+  useEffect(() => {
+    let max = 1;
+    const onScroll = () => {
+      progress.current = Math.min(1, Math.max(0, window.scrollY / max));
+    };
+    const measure = () => {
+      max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      onScroll();
+    };
+    measure();
+    // içerik (lazy bölümler, fontlar) yüksekliği sonradan değiştirebilir
+    const t = window.setTimeout(measure, 1500);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+  return progress;
+}
+
+function Network({ count, packetCount, flight }: { count: number; packetCount: number; flight: boolean }) {
   const group = useRef<THREE.Group>(null);
   const net = useMemo(() => buildNetwork(count), [count]);
+  const scrollTarget = useScrollProgress();
+  const scroll = useRef(0);
   // canvas sits under the content layer, so read parallax from the window
   const mouse = useRef({ x: 0, y: 0 });
   useEffect(() => {
@@ -86,9 +120,21 @@ function Network({ count, packetCount }: { count: number; packetCount: number })
 
   useFrame((state, dt) => {
     const t = state.clock.elapsedTime;
+
+    // scroll'u yumuşat ve kamerayı ağın içinden uçur (reduced-motion'da sabit kalır)
+    if (flight) {
+      scroll.current += (scrollTarget.current - scroll.current) * Math.min(1, dt * 4);
+      const s = scroll.current;
+      const cam = state.camera;
+      cam.position.z = CAM_START_Z + (CAM_END_Z - CAM_START_Z) * s;
+      cam.position.x = Math.sin(s * Math.PI * 1.6) * 1.6 + mouse.current.x * 0.6;
+      cam.position.y = Math.sin(s * Math.PI) * -1.2 + mouse.current.y * -0.4;
+      cam.rotation.z = Math.sin(s * Math.PI * 2) * 0.03;
+    }
+
     if (group.current) {
-      group.current.rotation.y = Math.sin(t * 0.05) * 0.25 + mouse.current.x * 0.35;
-      group.current.rotation.x = Math.cos(t * 0.04) * 0.12 + mouse.current.y * -0.2;
+      group.current.rotation.y = Math.sin(t * 0.05) * 0.08 + mouse.current.x * 0.06;
+      group.current.rotation.x = Math.cos(t * 0.04) * 0.04 + mouse.current.y * -0.04;
     }
     if (packetCount === 0) return;
     const arr = packetGeo.attributes.position.array as Float32Array;
@@ -116,7 +162,7 @@ function Network({ count, packetCount }: { count: number; packetCount: number })
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[net.linePos, 3]} />
         </bufferGeometry>
-        <lineBasicMaterial color={COL.line} transparent opacity={0.18} blending={THREE.AdditiveBlending} />
+        <lineBasicMaterial color={COL.line} transparent opacity={0.22} blending={THREE.AdditiveBlending} />
       </lineSegments>
 
       <points>
@@ -125,7 +171,7 @@ function Network({ count, packetCount }: { count: number; packetCount: number })
           <bufferAttribute attach="attributes-color" args={[net.col, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.13}
+          size={0.14}
           vertexColors
           transparent
           opacity={0.95}
@@ -158,17 +204,20 @@ export default function NetworkBackground() {
     window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const small = typeof window !== 'undefined' && window.innerWidth < 760;
-  const count = small ? 70 : 150;
-  const packetCount = reduced ? 0 : small ? 18 : 44;
+  // alan scroll boyunca gezildiği için eski sabit sahneden daha yoğun
+  const count = small ? 150 : 320;
+  const packetCount = reduced ? 0 : small ? 22 : 60;
 
   return (
     <Canvas
       style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }}
-      camera={{ position: [0, 0, 13], fov: 60 }}
+      camera={{ position: [0, 0, CAM_START_Z], fov: 60 }}
       dpr={[1, 1.8]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
     >
-      <Network count={count} packetCount={packetCount} />
+      {/* derinlik hissi: uzak düğümler arka plana karışır */}
+      <fog attach="fog" args={['#05060a', 7, 34]} />
+      <Network count={count} packetCount={packetCount} flight={!reduced} />
       <EffectComposer>
         <Bloom intensity={1.1} luminanceThreshold={0.05} luminanceSmoothing={0.5} mipmapBlur radius={0.7} />
         <Vignette eskil={false} offset={0.25} darkness={0.85} />

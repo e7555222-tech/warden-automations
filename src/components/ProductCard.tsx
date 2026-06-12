@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowRight, type LucideIcon } from 'lucide-react';
 
 interface ProductCardProps {
@@ -14,6 +14,12 @@ interface ProductCardProps {
   onDemoClick?: () => void;
 }
 
+// dokunmatik cihazlarda tilt devre dışı: hover yok, transform sıçramaları rahatsız eder
+const canTilt =
+  typeof window !== 'undefined' &&
+  window.matchMedia &&
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 export default function ProductCard({
   index,
   name,
@@ -24,24 +30,41 @@ export default function ProductCard({
   points = [],
   onDemoClick,
 }: ProductCardProps) {
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const springRX = useSpring(rotateX, { stiffness: 180, damping: 20 });
+  const springRY = useSpring(rotateY, { stiffness: 180, damping: 20 });
+
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`);
     e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
+    if (!canTilt) return;
+    rotateY.set(((e.clientX - r.left) / r.width - 0.5) * 12);
+    rotateX.set(-((e.clientY - r.top) / r.height - 0.5) * 10);
+  };
+
+  const onLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
   };
 
   return (
-    <motion.div whileHover={{ y: -6 }} transition={{ duration: 0.3 }} className="h-full">
-      <div
+    <motion.div whileHover={{ y: -6 }} transition={{ duration: 0.3 }} className="h-full [perspective:1100px]">
+      <motion.div
         onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        style={{ rotateX: springRX, rotateY: springRY, transformStyle: 'preserve-3d' }}
         className="warden-card group relative h-full overflow-hidden rounded-2xl p-8 flex flex-col
           border border-[rgba(120,150,220,0.14)] bg-[rgba(18,22,34,0.5)] backdrop-blur-xl
           transition-colors duration-300 hover:border-[rgba(77,141,255,0.4)]"
       >
-        <div className="relative z-10 flex flex-col h-full">
+        {/* içerik kartın cam yüzeyinden öne çıkar */}
+        <div className="relative z-10 flex flex-col h-full [transform:translateZ(36px)]">
           <div className="flex items-center justify-between mb-6">
             <span className="flex items-center justify-center w-12 h-12 rounded-xl
-              border border-[rgba(120,150,220,0.18)] bg-[rgba(77,141,255,0.08)] text-warden-cyan">
+              border border-[rgba(120,150,220,0.18)] bg-[rgba(77,141,255,0.08)] text-warden-cyan
+              [transform:translateZ(18px)]">
               <Icon className="w-5 h-5" strokeWidth={1.6} />
             </span>
             <span className="font-mono text-xs text-zinc-600">/{index}</span>
@@ -81,7 +104,7 @@ export default function ProductCard({
             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
           </motion.button>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
